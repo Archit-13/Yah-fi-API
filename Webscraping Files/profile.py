@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup as soup
-url='https://ca.finance.yahoo.com/quote/GOOGL/profile'
+url='https://ca.finance.yahoo.com/quote/YAHOY/profile?p=YAHOY&.tsrc=fin-srch'
 obj=requests.get(url)
 souppage=soup(obj.text,"html.parser")
 tableithink=souppage.findAll("span")
@@ -14,9 +14,11 @@ for  i in range(len(lists)):
         lists[i]=lists[i][2].replace("<!-- /react-text --",'').replace("</span",'').replace("amp; "," ")
     #print(lists[i])
 i=0
+done = 1
 while i <(len(lists)):
-    if (lists[i]=="Mr. Lawrence Edward Page"):
+    if  ("Mr" or "Ms") in lists[i] and done:
         j=i
+        done = 0
         i+=1
     elif (lists[i]=="N/A"):
             lists.pop(i+1)
@@ -26,11 +28,13 @@ while i <(len(lists)):
     
 
 csv=[]
-#print(i)
+
 k=j+25
 while j<k:
     csv.append([lists[j],lists[j+1],lists[j+2],lists[j+3],lists[j+4]])
     j+=5
+#print(csv)
+
 finalcsv=''
 for x in csv :
     for i in x:
