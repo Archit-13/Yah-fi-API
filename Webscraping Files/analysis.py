@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup as soup
-url='https://ca.finance.yahoo.com/quote/MSFT/analysis?p=MSFT'
+url='https://ca.finance.yahoo.com/quote/GOOGL/analysis?p=GOOGL&.tsrc=fin-srch'
 obj=requests.get(url)
 souppage=soup(obj.text,"html.parser")
 tableithink=souppage.findAll("span")
@@ -12,24 +12,77 @@ for  i in range(len(lists)):
     #print(lists[i])
 for  i in range(len(lists)):
     if (lists[i]=="Earnings Estimate"):
+        lists.pop(i+1)
+        lists.pop(i+3)
+        lists.pop(i+5)
+        lists.pop(i+6)
+        lists[i+1]=lists[i+1].replace('.','/')
+        lists[i+3]=lists[i+3].replace('.','/')
+        lists[i+1]+=lists[i+2]
+        lists[i+3]+=lists[i+4]
+        lists.pop(i+2)
+        lists.pop(i+3)        
         j=i
+    elif (lists[i]=="Earnings Estimate"):
+        lists.pop(i+1)
+        lists.pop(i+3)
+        lists.pop(i+5)
+        lists.pop(i+6)
+        lists[i+1]=lists[i+1].replace('.','/')
+        lists[i+3]=lists[i+3].replace('.','/')
+        lists[i+1]+=lists[i+2]
+        lists[i+3]+=lists[i+4]
+        lists.pop(i+2)
+        lists.pop(i+3)        
+        
+    elif (lists[i]=="Revenue Estimate"):
+        lists.pop(i+1)
+        lists.pop(i+3)
+        lists.pop(i+5)
+        lists.pop(i+6)
+        lists[i+1]=lists[i+1].replace('.','/')
+        lists[i+3]=lists[i+3].replace('.','/')
+        lists[i+1]+=lists[i+2]
+        lists[i+3]+=lists[i+4]
+        lists.pop(i+2)
+        lists.pop(i+3)        
+    elif (lists[i]=="EPS Trend"):
+        lists.pop(i+1)
+        lists.pop(i+3)
+        lists.pop(i+5)
+        lists.pop(i+6)
+        lists[i+1]=lists[i+1].replace('.','/')
+        lists[i+3]=lists[i+3].replace('.','/')
+        lists[i+1]+=lists[i+2]
+        lists[i+3]+=lists[i+4]
+        lists.pop(i+2)
+        lists.pop(i+3)        
+    elif (lists[i]=="EPS Revisions"):
+        lists.pop(i+1)
+        lists.pop(i+3)
+        lists.pop(i+5)
+        lists.pop(i+6)
+        lists[i+1]=lists[i+1].replace('.','/')
+        lists[i+3]=lists[i+3].replace('.','/')
+        lists[i+1]+=lists[i+2]
+        lists[i+3]+=lists[i+4]  
+        lists.pop(i+2)
+        lists.pop(i+3)
+
     elif lists[i]=="":
         break
+
 csv=[]
 #print(i)
 while j<i:
-    if (any(k.isdigit() for k in lists[j+1])):
         csv.append([lists[j],lists[j+1],lists[j+2],lists[j+3],lists[j+4]])
         j+=5
-    else:
-        csv.append([lists[j]," "," "," "," "])
-        j+=1
 finalcsv=''
 for x in csv :
     for i in x:
         finalcsv+=i.replace(","," ")+","
     finalcsv+="\n"
-f=open('anaylsis.csv','w')
+f=open('analysis.csv','w')
 f.write(finalcsv)
 f.close()
 for x in csv:
